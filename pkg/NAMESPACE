@@ -1,0 +1,6 @@
+import(Epi)
+import(methods)
+import(caTools)
+exportPattern("^[^\\_|^\\.]")
+
+
