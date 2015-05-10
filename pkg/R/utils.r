@@ -151,9 +151,9 @@
     if(is.null(modlist$initial))
         modlist$initial = 4
     if(is.null(modlist$param))
-        modlist$param = c(0.2, 0.01)
+        modlist$param = c(1, 0.00005)
     if(is.null(modlist$prior))
-        modlist$prior = "pc.prec"
+        modlist$prior = "loggamma"
     return(modlist)
 }
 
@@ -166,8 +166,8 @@
     if(is.null(modlist$initial))
         modlist$initial = 4
     if(is.null(modlist$param))
-        modlist$param = c(0.3, 0.01)
+        modlist$param = c(1, 0.00005)
     if(is.null(modlist$prior))
-        modlist$prior = "pc.prec"
+        modlist$prior = "loggamma"
     return(modlist)
 }

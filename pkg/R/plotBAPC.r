@@ -42,7 +42,9 @@ plotBAPC <- function(APCList, scale=10^3, type="ageSpecProj", showdata=FALSE, mf
                 matplot(plab, y[,u]/n[,u]*scale, type="p", pch=20, add=T)
             }
         }
-        abline(v=max(as.numeric(plab))-APCList@npred + .5, col="grey55", lwd=1.2)
+        #abline(v=max(as.numeric(plab))-APCList@npred + .5, col="grey55", lwd=1.2)
+        numplab <- as.numeric(plab) 
+	abline(v=max(numplab)-(APCList@npred*(numplab[2]-numplab[1])) + .5, col="grey55", lwd=1.2)
       }
     }
 
@@ -77,7 +79,10 @@ plotBAPC <- function(APCList, scale=10^3, type="ageSpecProj", showdata=FALSE, mf
                 matplot(plab, y[,u]/n[,u]*scale, type="p", pch=20, add=T)
             }
         }
-        abline(v=max(as.numeric(plab))-APCList@npred + .5, col="grey55", lwd=1.2)
+        #abline(v=max(as.numeric(plab))-APCList@npred + .5, col="grey55", lwd=1.2)
+        numplab <- as.numeric(plab) 
+	abline(v=max(numplab)-(APCList@npred*(numplab[2]-numplab[1])) + .5, col="grey55", lwd=1.2)
+
       }
     }
     if(type=="ageSpecProj"){
@@ -111,7 +116,11 @@ plotBAPC <- function(APCList, scale=10^3, type="ageSpecProj", showdata=FALSE, mf
                 matplot(plab, y[,u]/n[,u]*scale, type="p", pch=20, add=T)
             }
 	      }
-	      abline(v=max(as.numeric(plab))-APCList@npred + .5, col="grey55", lwd=1.2)
+	      
+	     #abline(v=max(as.numeric(plab))-APCList@npred + .5, col="grey55", lwd=1.2)
+	             numplab <- as.numeric(plab) 
+	abline(v=max(numplab)-(APCList@npred*(numplab[2]-numplab[1])) + .5, col="grey55", lwd=1.2)
+
 	  }
     } 
     if(type=="ageStdBoth"){
@@ -137,7 +146,11 @@ plotBAPC <- function(APCList, scale=10^3, type="ageSpecProj", showdata=FALSE, mf
           } else {
             matplot(plab, rowSums(my.wm * y/n*scale), type="p", pch=20, add=T)
           }
-          abline(v=max(as.numeric(plab))-APCList@npred + .5, col="grey55", lwd=1.2)
+          
+          #abline(v=max(as.numeric(plab))-APCList@npred + .5, col="grey55", lwd=1.2)
+                  numplab <- as.numeric(plab) 
+	abline(v=max(numplab)-(APCList@npred*(numplab[2]-numplab[1])) + .5, col="grey55", lwd=1.2)
+
       }
     }
 
@@ -156,7 +169,10 @@ plotBAPC <- function(APCList, scale=10^3, type="ageSpecProj", showdata=FALSE, mf
           } else {
             matplot(plab, rowSums(my.wm * y/n*scale), type="p", pch=20, add=T)
           }
-	      abline(v=max(as.numeric(plab))-APCList@npred + .5, col="grey55", lwd=1.2)
+	      #abline(v=max(as.numeric(plab))-APCList@npred + .5, col="grey55", lwd=1.2)
+	              numplab <- as.numeric(plab) 
+	abline(v=max(numplab)-(APCList@npred*(numplab[2]-numplab[1])) + .5, col="grey55", lwd=1.2)
+
       }
     }
     if(type=="ageStdProj"){
@@ -174,7 +190,10 @@ plotBAPC <- function(APCList, scale=10^3, type="ageSpecProj", showdata=FALSE, mf
           } else {
             matplot(plab, rowSums(my.wm * y/n*scale, na.rm=T), type="p", pch=20, add=T)
           }
-          abline(v=max(as.numeric(plab))-APCList@npred + .5, col="grey55", lwd=1.2)
+         #abline(v=max(as.numeric(plab))-APCList@npred + .5, col="grey55", lwd=1.2)
+                  numplab <- as.numeric(plab) 
+	abline(v=max(numplab)-(APCList@npred*(numplab[2]-numplab[1])) + .5, col="grey55", lwd=1.2)
+
       }
     }
 }

@@ -8,6 +8,7 @@ setClass("APCList", representation(
     age.idx="numeric",
     period.idx="numeric",
     cohort.idx="numeric",
+    overdis.idx="numeric",
     stdweight="numeric",
     stdobs="numeric",
     npred="numeric",
@@ -71,11 +72,12 @@ setMethod("APCList", c("data.frame", "data.frame", "numeric"),
     age.idx <- rep(1:nap, each=npp)
     period.idx <- rep(1:npp, nap)
     cohort.idx <- gf*(nap - age.idx) + period.idx
+    overdis.idx <- 1:(nap*npp)
     stdweight <- stdweight/sum(stdweight)
 
     new("APCList", epi=epi, pyrs=pyrs, gf=gf, 
         agelab=agelab, periodlab=periodlab, cohortlab=cohortlab,
-        age.idx=age.idx, period.idx=period.idx, cohort.idx=cohort.idx,
+        age.idx=age.idx, period.idx=period.idx, cohort.idx=cohort.idx, overdis.idx=overdis.idx,
         stdweight=stdweight, stdobs=stdobs, npred=npred, agespec.rate=agespec.rate, 
         agespec.proj=agespec.proj, agestd.rate=agestd.rate, 
         agestd.proj=agestd.proj)
@@ -205,6 +207,12 @@ setMethod("cohortindex", "APCList",
     function(x) {
         x@cohort.idx
 })
+if(!isGeneric("overdisindex")) setGeneric("overdisindex", 
+    function(x) standardGeneric("overdisindex"))
+setMethod("overdisindex", "APCList",
+    function(x) {
+        x@overdis.idx
+})
 if(!isGeneric("stdweight")) setGeneric("stdweight", 
     function(x) standardGeneric("stdweight"))
 setMethod("stdweight", "APCList",
@@ -260,6 +268,13 @@ setReplaceMethod("cohortindex", "APCList", function(x, value) {
     if(length(value) != length(x@cohort.idx))
         stop("\n\n\tThe index vector does not have the correct length!\n")
     x@cohort.idx <- value
+    x
+})
+setGeneric("overdisindex<-", function(x, value) standardGeneric("overdisindex<-"))
+setReplaceMethod("overdisindex", "APCList", function(x, value) {
+    if(length(value) != length(x@overdis.idx))
+        stop("\n\n\tThe index vector does not have the correct length!\n")
+    x@overdis.idx <- value
     x
 })
 setGeneric("agelabels<-", function(x, value) standardGeneric("agelabels<-"))

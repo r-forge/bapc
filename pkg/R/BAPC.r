@@ -47,7 +47,7 @@ BAPC <- function(APCList,  predict = list(npredict = 0, retro = TRUE),
   # cohort index
   k <- cohortindex(APCList)
   # overdispersion parameter
-  z <- 1:(I*J)
+  z <- overdisindex(APCList)
 
   # data frame for inla
   data.inla <- data.frame(y=y, n=n, i=i, j=j, k=k, z=z)

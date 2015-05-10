@@ -38,6 +38,10 @@
 \alias{cohortindex}
 \alias{cohortindex<-}
 \alias{cohortindex<-,APCList-method}
+\alias{overdisindex,APCList-method}
+\alias{overdisindex}
+\alias{overdisindex<-}
+\alias{overdisindex<-,APCList-method}
 \alias{agespec.rate}
 \alias{agespec.rate,APCList-method}
 \alias{agespec.rate<-}
@@ -95,7 +99,8 @@
             \item{\code{cohortlab}}{A character vector with cohort labels.}        
             \item{\code{ageindex}}{An integer index vector for age groups (derived internally).}  
             \item{\code{periodindex}}{An integer index vector for periods (derived internally).}
-            \item{\code{cohortindex}}{An integer index vector with cohort (derived internally).}    
+            \item{\code{cohortindex}}{An integer index vector for cohort (derived internally).}    
+            \item{\code{overdisindex}}{An integer index vector for the overdispersion (derived internally).}    
             \item{\code{stdweight}}{Vector of length I giving one weight for each age group to compute age-standardized projections.}
             \item{\code{stdobs}}{Vector of length I containing age-standardized observations.}
             \item{\code{npred}}{Number of periods that were predicted.}
@@ -153,6 +158,10 @@
         replace the \code{cohortindex} slot used in the INLA formula.
         Caution: Changing this index you should know what you do, 
         otherwise it will result in errors.}        
+    \item{overdisindex<-}{\code{signature(x = "APCList")}: 
+        replace the \code{overdisindex} slot used in the INLA formula.
+        Caution: Changing this index you should know what you do, 
+        otherwise it will result in errors.}               
     \item{agelabels<-}{\code{signature(x = "APCList")}: 
         replace the \code{agelabels} slot }
     \item{periodlabels<-}{\code{signature(x = "APCList")}: 

@@ -1,12 +1,12 @@
 Package: BAPC
-Version: 0.0.21
-Title: Projection of cancer incidence and mortality data using Bayesian APC models fitted with INLA.
-Date: 2015-03-30
+Version: 0.0.23
+Title: Projection of cancer incidence and mortality data using Bayesian APC models fitted with INLA
+Date: 2015-05-09
 Author: Andrea Riebler <andrea.riebler@math.ntnu.no> and Leonhard Held <leonhard.held@ifspm.uzh.ch>
 Maintainer: Andrea Riebler <andrea.riebler@math.ntnu.no>
 LazyLoad: Yes
 Depends: R (>= 2.5), methods, caTools, Epi
 Suggests: INLA
-Description: Package implementing Bayesian age-period-cohort models with the focus on projections. BAPC uses integrated nested Laplace approximations (INLA) for full Bayesian inference.  BAPC generates age-specific and age-standardized projected rates. When interest lies in the predictive distribution, Poisson noise is automatically added. The INLA package can be obtained from http://www.r-inla.org . We recommend the testing version, which can be downloaded by running: install.packages("INLA", repos="http://www.math.ntnu.no/inla/R/testing")
+Description: Package implementing Bayesian age-period-cohort models with the focus on projections. BAPC uses integrated nested Laplace approximations (INLA) for full Bayesian inference.  BAPC generates age-specific and age-standardized projected rates. When interest lies in the predictive distribution, Poisson noise is automatically added. The INLA package can be obtained from http://www.r-inla.org . We recommend the testing version, which can be downloaded by running: install.packages("INLA", repos="http://www.math.ntnu.no/inla/R/testing").
 License: LGPL (>2)
 Additional_repositories: http://www.math.ntnu.no/inla/R/testing
