@@ -132,7 +132,7 @@ plotBAPC <- function(APCList, scale=10^3, type="ageSpecProj", showdata=FALSE, mf
       if(is.null(coladd))
         coladd=2
 
-      matplot(plab, agestd.rate(APCList)*scale, type="l", lty=c(2,1,2), col=1,  
+      matplot(plab, agestd.rate(APCList)[,1:3]*scale, type="l", lty=c(2,1,2), col=1,  
           xlab="Period", ylab=paste("Agestd. rate per ", format(scale, scientific=FALSE), sep=""),  ...)
       polygon(c(plab, rev(plab)), c(agestd.rate(APCList)[,1]*scale, rev(agestd.rate(APCList)[,3]*scale)), col=coladd, border=NA)
       matplot(plab, agestd.proj(APCList)[,1:3]/agg.n*scale, type="l", lty=c(2,1,2), col=c(1,1,1),  
