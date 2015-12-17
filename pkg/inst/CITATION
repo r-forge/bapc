@@ -1,7 +1,7 @@
 citHeader("To cite BAPC in publications use:")
 
 citEntry(entry = "TechReport",
-  title        = "Projecting the future burden of cancer - {B}ayesian age-period-cohort analysis for routine use",
+  title        = "Projecting the future burden of cancer - {B}ayesian age-period-cohort analysis with integrated nested Laplace approximations",
   author       = personList(as.person("Andrea Riebler"),
                    as.person("Leonhard Held")),
   Institution  = "Norwegian University of Science and Technology",
@@ -9,7 +9,7 @@ citEntry(entry = "TechReport",
 
   textVersion  =
   paste("Andrea Riebler and Leonhard Held (2015).",
-        "Projecting the future burden of cancer - Bayesian age-period-cohort analysis for routine use, ",
+        "Projecting the future burden of cancer -Bayesian age-period-cohort analysis with integrated nested Laplace approximations, ",
         "Technical report, ", "Norwegian University of Science and Technology.")
 )
 

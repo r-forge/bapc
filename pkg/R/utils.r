@@ -154,6 +154,8 @@
         modlist$param = c(1, 0.00005)
     if(is.null(modlist$prior))
         modlist$prior = "loggamma"
+    if(is.null(modlist$scale.model))
+        modlist$scale.model = FALSE
     return(modlist)
 }
 

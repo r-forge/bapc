@@ -120,7 +120,7 @@ BAPC <- function(APCList,  predict = list(npredict = 0, retro = TRUE),
   sd_m = matrix(sqrt(sig), ncol=I, nrow=J, byrow=F)
 
   pre <- exp(res$summary.linear.predictor[, c("0.025quant", "0.975quant")])
-  pre <- cbind("0.025CI"=pre[,1], "mean"=lambda, "0.975CI"=pre[,2], "sd"=sqrt(slambda))
+  pre <- cbind("0.025Q"=pre[,1], "mean"=lambda, "0.975Q"=pre[,2], "sd"=sqrt(slambda))
 
   plab=periodlabels(APCList)
   agespec.rate(APCList) <- lapply(1:I, function(m){tmp=pre[((m-1)*J+1):(m*J),]
@@ -128,7 +128,7 @@ BAPC <- function(APCList,  predict = list(npredict = 0, retro = TRUE),
       return(tmp)})
   names(agespec.rate(APCList)) <- agelabels(APCList)
   
-  agespec.proj(APCList) <- lapply(1:I, function(m){tmp=cbind("0.025CI"=lci_m[,m], "mean"=mu_m[,m], "0.975CI"=uci_m[,m], "sd"=sd_m[,m]);
+  agespec.proj(APCList) <- lapply(1:I, function(m){tmp=cbind("0.025Q"=lci_m[,m], "mean"=mu_m[,m], "0.975Q"=uci_m[,m], "sd"=sd_m[,m]);
      rownames(tmp)=plab
      return(tmp)})
   names(agespec.proj(APCList)) <- agelabels(APCList)
@@ -178,15 +178,15 @@ BAPC <- function(APCList,  predict = list(npredict = 0, retro = TRUE),
     new_l <- (new_mean - 1.96*my_sd) 
     new_u <- (new_mean + 1.96*my_sd) 
 
-    tmp = cbind("0.025CI"=new_l, "mean"=new_mean, "0.975CI"=new_u, "sd"=my_sd)
+    tmp = cbind("0.025Q"=new_l, "mean"=new_mean, "0.975Q"=new_u, "sd"=my_sd)
     rownames(tmp) = plab
     agestd.rate(APCList) <- tmp
     
     agg.n <- rowSums(pyrs(APCList))
     agg.mean <- agg.n * new_mean
     agg.std <- sqrt(agg.mean + agg.n^2*my_sd^2)
-    tmp = cbind("0.025CI"=agg.mean-1.96*agg.std, "mean"=agg.mean,
-        "0.975CI"=agg.mean+1.96*agg.std, "sd"=agg.std)
+    tmp = cbind("0.025Q"=agg.mean-1.96*agg.std, "mean"=agg.mean,
+        "0.975Q"=agg.mean+1.96*agg.std, "sd"=agg.std)
     rownames(tmp) = plab
     agestd.proj(APCList) <- tmp
   }
