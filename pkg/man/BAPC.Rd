@@ -6,14 +6,14 @@
 \description{
     A Bayesian age-period-cohort model fitted using a Poisson model within INLA is used to project
     mortality or disease rates. Age, period and/or cohort effects are either modelled using a random walk
-    of second order (RW2), or fixed effect (drift). 
+    of second order (RW2), or fixed effect (drift).
 }
 \usage{
-  BAPC(APCList, predict = list(npredict = 0, retro = TRUE), 
-  model = list(age = list(model = "rw2", prior="loggamma", param = c(1, 0.00005), initial = 4, scale.model=FALSE), 
-    period = list(include = TRUE, model = "rw2", prior="loggamma", param = c(1, 0.00005), initial = 4, scale.model=FALSE), 
-    cohort = list(include = TRUE, model = "rw2", prior="loggamma", param = c(1, 0.00005), initial = 4, scale.model=FALSE), 
-    overdis = list(include = TRUE, model = "iid", prior="loggamma", param = c(1, 0.005), initial = 4)), 
+  BAPC(APCList, predict = list(npredict = 0, retro = TRUE),
+  model = list(age = list(model = "rw2", prior="loggamma", param = c(1, 0.00005), initial = 4, scale.model=FALSE),
+    period = list(include = TRUE, model = "rw2", prior="loggamma", param = c(1, 0.00005), initial = 4, scale.model=FALSE),
+    cohort = list(include = TRUE, model = "rw2", prior="loggamma", param = c(1, 0.00005), initial = 4, scale.model=FALSE),
+    overdis = list(include = TRUE, model = "iid", prior="loggamma", param = c(1, 0.005), initial = 4)),
   verbose = FALSE, stdweight = NULL)
 }
 \arguments{
@@ -21,8 +21,8 @@
     a \code{APCList} object
 }
   \item{predict}{
-    a list specifying how many periods are to be projected and whether existing counts shoud be removed and projected. 
-    The first argument \code{npredict} sets the number of periods to predict. The second argument \code{retro} is a boolean 
+    a list specifying how many periods are to be projected and whether existing counts shoud be removed and projected.
+    The first argument \code{npredict} sets the number of periods to predict. The second argument \code{retro} is a boolean
     indicating whether the past \code{npredict} periods should be removed or predicted or whether future rates are to be predicted.
     If \code{retro} is FALSE data cells for which the corresponing observation count is set to NA will be projected.}
   \item{model}{
@@ -40,7 +40,8 @@
     }
   \item{stdweight}{
     Numeric vector with length equal to the number of age groups used to derive age-standardized projections.
-    If the weights do not sum to one, they will be normalised internally.
+    If the weights do not sum to one, they will be normalised internally. If no weights are provided, there will 
+    no age-standardized projections be computed.
     }
 }
 \value{
@@ -72,7 +73,7 @@ if(requireNamespace("INLA", quietly = TRUE)) {
 
    lc_sweden <- APCList(FemLCSweden, FemPYSweden, gf=5)
 
-   lc_sweden <- BAPC(lc_sweden, predict=list(npredict=10, retro=TRUE), 
+   result <- BAPC(lc_sweden, predict=list(npredict=10, retro=TRUE),
       verbose=FALSE, stdweight=whostandard[6:17,2])
 }
 }

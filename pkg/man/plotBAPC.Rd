@@ -6,11 +6,13 @@
 }
 \description{
 Function to plot age-specific and/or agestandardized projections of a Bayesian age-period-cohort model
-generated using \code{BAPC}.
+generated using \code{BAPC} using a fanplot.
 }
 \usage{
-plotBAPC(APCList, scale = 10^3, type="ageSpecProj", 
-    showdata = FALSE, mfrow = NULL, coladd = NULL, ...)
+plotBAPC(APCList, scale = 10^5, type="ageSpecProj",
+    probs = c(0.025, seq(0.05, 0.95, by=0.05), 0.975), start=NULL,
+    showdata = TRUE, mfrow = NULL, col.fan =sequential_hcl,
+    obs.pch=21, obs.col="white", obs.bg="black", obs.lwd=2, obs.cex=1, ln=NULL, ...)
 }
 \arguments{
   \item{APCList}{
@@ -20,24 +22,57 @@ plotBAPC(APCList, scale = 10^3, type="ageSpecProj",
     Scaling factor for the incidence/mortality rates.
 }
   \item{type}{
-   String indicating what should be plotted: 
+   String indicating what should be plotted:
    \code{ageSpecRate} --- projected age-specific rates,
-   \code{ageSpecProj} --- projected age-specific counts, 
-   \code{ageSpecBoth} --- projected age-specific rates and counts in one plot, 
+   \code{ageSpecProj} --- projected age-specific counts,
    \code{ageStdRate} --- projected age-standardized rates,
    \code{ageStdProj} --- projected age-standardized counts or
-   \code{ageStdProj} --- projected age-standardized rates and counts in one plot.
+ }
+  \item{probs}{
+   Probabilities related to percentiles or prediction intervals
+          to be plotted. These values
+          control the number of shades used in the 'fan'.
+          These must be between 0 and 1.
+          Percentiles greater than 0.5, if not given, are
+          automatically calculated as 1-'p', to ensure symmetric fan.
+          Values can be non-integers. See function \code{fan()}.
+}
+  \item{start}{
+   If NULL results for all periods are plotted. Otherwise 'start' must be
+   a string representing the year to start plotting. It must be an
+   element of \code{periodlabels(APCList)}.
 }
   \item{showdata}{
-    Boolean indicating whether observed data points should be added to the plot
+    Boolean indicating whether observed data points should be added to
+    the plot. Default: TRUE.
 }
   \item{mfrow}{
-    A vector of the form 'c(nr, nc)'. Subsequent figures will be drawn in 
-    an 'nr'-by-'nc' array on the device by _columns_ ('mfcol'), 
-    or _rows_ ('mfrow'), respectively. 
+    A vector of the form 'c(nr, nc)'. Subsequent figures will be drawn in
+    an 'nr'-by-'nc' array on the device by _columns_ ('mfcol'),
+    or _rows_ ('mfrow'), respectively.
 }
-  \item{coladd}{
-    color used for intervals of projected counts when \code{type=="ageSpecBoth"} or \code{type=="ageStdBoth"}.
+  \item{col.fan}{
+    Palette of colours used in the 'fan'. See fucntion \code{fan()} of
+    the package \code{fanplot}
+}
+  \item{obs.pch}{
+    Plotting character, i.e. symbol, to be used when showing observed values. See 
+    options pch in points.
+}
+  \item{obs.col}{
+    Color used when observed data are plotted.
+}
+  \item{obs.bg}{
+    Background (fill) color for the open plot symbols given by 'obs.pch = 21:25'.
+}
+  \item{obs.lwd}{
+    Line width for drawing observed symbols.
+}
+  \item{obs.cex}{
+    Character expansion when drawing observed symbols.
+}
+  \item{ln}{
+    Equivalent to option 'ln' of function \code{fan}.
 }
   \item{\dots}{
     Further arguments passed to \code{par()}
@@ -45,7 +80,7 @@ plotBAPC(APCList, scale = 10^3, type="ageSpecProj",
 }
 
 \value{
-    One or two plotting devices illustrating age-specific and/or age-standardized 
+    A plot illustrating age-specific or age-standardized
     projections/fitted values.
 }
 
@@ -63,21 +98,21 @@ if(requireNamespace("INLA", quietly = TRUE)) {
 
     lc_sweden <- APCList(FemLCSweden, FemPYSweden, gf=5)
 
-    lc_sweden <- BAPC(lc_sweden, predict=list(npredict=10, retro=TRUE), 
+    result  <- BAPC(lc_sweden, predict=list(npredict=10, retro=TRUE),
         verbose=FALSE, stdweight=whostandard[6:17,2])
 
-    plotBAPC(lc_sweden, scale=10^5, type="ageSpecProj", showdata=TRUE)
+    plotBAPCresult, scale=10^5, type="ageSpecProj", showdata=TRUE)
 
-    ## Assume the data for 2000 to 2010 are not observed 
+    ## Assume the data for 2000 to 2010 are not observed
     ## (projection results are the same as above)
     FemLCSweden[51:60,] <- NA
 
     lc_sweden <- APCList(FemLCSweden, FemPYSweden, gf=5)
 
-    lc_sweden <- BAPC(lc_sweden, predict=list(npredict=10, retro=FALSE), 
+    result  <- BAPC(lc_sweden, predict=list(npredict=10, retro=FALSE),
         verbose=FALSE, stdweight=whostandard[6:17,2])
 
-    plotBAPC(lc_sweden, scale=10^5, type="ageSpecProj", showdata=TRUE)
+    plotBAPC(result, scale=10^5, type="ageSpecProj", showdata=TRUE)
 }
 }
 }

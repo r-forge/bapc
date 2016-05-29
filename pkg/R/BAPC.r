@@ -94,43 +94,54 @@ BAPC <- function(APCList,  predict = list(npredict = 0, retro = TRUE),
   }
 
   res <- INLA::inla(as.formula(formula), family="Poisson", data=data.inla, E=n, 
-      control.predictor=list(compute=TRUE),
+      control.predictor=list(compute=TRUE, link=1),
       lincomb=lcs,
-      quantiles=c(0.025, 0.1, 0.25, 0.5, 0.75, 0.9, 0.975),
+      #quantiles=c(0.025, 0.1, 0.25, 0.5, 0.75, 0.9, 0.975),
       control.compute=list(config=config, dic=TRUE, cpo=TRUE),
       control.inla=list(lincomb.derived.only=TRUE, lincomb.derived.correlation.matrix=TRUE), verbose=verbose)
   inlares(APCList) <- res
 
-  lambda=sapply(1:(I*J), function(i){INLA::inla.emarginal(function(x){exp(x)}, res$marginals.linear.predictor[[i]])})
-  lambda2=sapply(1:(I*J), function(i){INLA::inla.emarginal(function(x){exp(x)^2}, res$marginals.linear.predictor[[i]])})
+#   lambda=sapply(1:(I*J), function(i){INLA::inla.emarginal(function(x){exp(x)}, res$marginals.linear.predictor[[i]])})
+#   lambda2=sapply(1:(I*J), function(i){INLA::inla.emarginal(function(x){exp(x)^2}, res$marginals.linear.predictor[[i]])})
+# 
+#   # variance of lambda
+#   slambda = lambda2 - lambda^2
 
+  lambda = res$summary.fitted.values$mean
   # variance of lambda
-  slambda = lambda2 - lambda^2
-
+  slambda = (res$summary.fitted.values$sd)^2
+  
   # mean of the predictive distribution
   mu = n*lambda
   # variance of the predictive distribution
   sig = mu + n^2*slambda
 
   mu_m = matrix(mu, ncol=I, nrow=J, byrow=F)
-  lci_m = matrix(mu-1.96*sqrt(sig), ncol=I, nrow=J, byrow=F)
+  ##  lci_m = matrix(mu-1.96*sqrt(sig), ncol=I, nrow=J, byrow=F)
+  # lci_m = matrix(qnorm(0.025, mean=mu, sd=sqrt(sig)), ncol=I, nrow=J, byrow=F)
   # do not allow for negative projection rates and set them to zero instead
-  lci_m[lci_m < 0] = 0
-  uci_m = matrix(mu+1.96*sqrt(sig), ncol=I, nrow=J, byrow=F)
+  #lci_m[lci_m < 0] = 0
+  ##uci_m = matrix(mu+1.96*sqrt(sig), ncol=I, nrow=J, byrow=F)
+  #uci_m = matrix(qnorm(0.975, mean=mu, sd=sqrt(sig)), ncol=I, nrow=J, byrow=F)
   sd_m = matrix(sqrt(sig), ncol=I, nrow=J, byrow=F)
 
-  pre <- exp(res$summary.linear.predictor[, c("0.025quant", "0.975quant")])
-  pre <- cbind("0.025Q"=pre[,1], "mean"=lambda, "0.975Q"=pre[,2], "sd"=sqrt(slambda))
-
+  #inlaq <- t(sapply(1:(I*J), function(i){INLA::inla.qmarginal(c(0.025, 0.975), res$marginals.linear.predictor[[i]])}))
+  #pre <- exp(inlaq)
+  #pre <- cbind("0.025Q"=pre[,1], "mean"=lambda, "0.975Q"=pre[,2], "sd"=sqrt(slambda))
+  pre <- cbind("mean"=lambda, "sd"=sqrt(slambda))
+  
   plab=periodlabels(APCList)
   agespec.rate(APCList) <- lapply(1:I, function(m){tmp=pre[((m-1)*J+1):(m*J),]
       rownames(tmp)=plab
       return(tmp)})
   names(agespec.rate(APCList)) <- agelabels(APCList)
   
-  agespec.proj(APCList) <- lapply(1:I, function(m){tmp=cbind("0.025Q"=lci_m[,m], "mean"=mu_m[,m], "0.975Q"=uci_m[,m], "sd"=sd_m[,m]);
-     rownames(tmp)=plab
-     return(tmp)})
+  #agespec.proj(APCList) <- lapply(1:I, function(m){tmp=cbind("0.025Q"=lci_m[,m], "mean"=mu_m[,m], "0.975Q"=uci_m[,m], "sd"=sd_m[,m]);
+  #   rownames(tmp)=plab
+  #   return(tmp)})
+  agespec.proj(APCList) <- lapply(1:I, function(m){tmp=cbind("mean"=mu_m[,m], "sd"=sd_m[,m]);
+  rownames(tmp)=plab
+  return(tmp)})
   names(agespec.proj(APCList)) <- agelabels(APCList)
   
 
@@ -175,18 +186,22 @@ BAPC <- function(APCList,  predict = list(npredict = 0, retro = TRUE),
     my.wm <- matrix(rep(stdweight, each=J), byrow=F, nrow=J)
     new_mean <- rowSums(my.wm*new_mean)
    
-    new_l <- (new_mean - 1.96*my_sd) 
-    new_u <- (new_mean + 1.96*my_sd) 
+    ##new_l <- (new_mean - 1.96*my_sd) 
+    ##new_u <- (new_mean + 1.96*my_sd) 
+    #new_l <- qnorm(0.025, mean=new_mean, sd=my_sd)
+    #new_u <- qnorm(0.975, mean=new_mean, sd=my_sd)
 
-    tmp = cbind("0.025Q"=new_l, "mean"=new_mean, "0.975Q"=new_u, "sd"=my_sd)
+    #tmp = cbind("0.025Q"=new_l, "mean"=new_mean, "0.975Q"=new_u, "sd"=my_sd)
+    tmp = cbind("mean"=new_mean, "sd"=my_sd)
     rownames(tmp) = plab
     agestd.rate(APCList) <- tmp
     
     agg.n <- rowSums(pyrs(APCList))
     agg.mean <- agg.n * new_mean
     agg.std <- sqrt(agg.mean + agg.n^2*my_sd^2)
-    tmp = cbind("0.025Q"=agg.mean-1.96*agg.std, "mean"=agg.mean,
-        "0.975Q"=agg.mean+1.96*agg.std, "sd"=agg.std)
+    #tmp = cbind("0.025Q"=agg.mean-1.96*agg.std, "mean"=agg.mean,
+    #    "0.975Q"=agg.mean+1.96*agg.std, "sd"=agg.std)
+    tmp = cbind("mean"=agg.mean, "sd"=agg.std)
     rownames(tmp) = plab
     agestd.proj(APCList) <- tmp
   }

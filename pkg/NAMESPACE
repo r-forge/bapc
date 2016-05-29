@@ -1,6 +1,10 @@
 import(Epi)
+import(fanplot)
+import(colorspace)
 import(methods)
 import(caTools)
+importFrom("graphics", "abline", "axis", "lines", "matplot", "par")
+importFrom("stats", "as.formula", "dpois", "qnorm")
 exportPattern("^[^\\_|^\\.]")
 
 

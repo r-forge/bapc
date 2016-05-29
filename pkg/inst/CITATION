@@ -5,11 +5,11 @@ citEntry(entry = "TechReport",
   author       = personList(as.person("Andrea Riebler"),
                    as.person("Leonhard Held")),
   Institution  = "Norwegian University of Science and Technology",
-  year         = "2015",
+  year         = "2016",
 
   textVersion  =
-  paste("Andrea Riebler and Leonhard Held (2015).",
-        "Projecting the future burden of cancer -Bayesian age-period-cohort analysis with integrated nested Laplace approximations, ",
+  paste("Andrea Riebler and Leonhard Held (2016).",
+        "Projecting the future burden of cancer - Bayesian age-period-cohort analysis with integrated  nested Laplace approximations, ",
         "Technical report, ", "Norwegian University of Science and Technology.")
 )
 
