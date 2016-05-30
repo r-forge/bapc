@@ -9,7 +9,7 @@
     against period.
 }
 \usage{
-ratesByAge(APCList, age, per, scale=10^3, type="pa", log.ax = "", ann = TRUE, grid = TRUE, ...)
+ratesByAge(APCList, age, per, scale=10^3, log.ax = "", ann = TRUE, grid = TRUE, ...)
 }
 \arguments{
   \item{APCList}{
@@ -23,11 +23,6 @@ ratesByAge(APCList, age, per, scale=10^3, type="pa", log.ax = "", ann = TRUE, gr
 }
   \item{per}{
     Numerical vector giving the means of the periods. 
-}
-  \item{type}{
-    A character vector with elements from 'c('"pa"','"ca"')', 
-    indication which plots should be produced.  Thus, '"pa"' 
-    will plot period against age.
 }
   \item{log.ax}{
     Character where '"y"' and '"r"' both refer to the rate scale. Defaults to '""'.
@@ -67,5 +62,5 @@ ratesByAge(APCList, age, per, scale=10^3, type="pa", log.ax = "", ann = TRUE, gr
 
    lc_sweden <- APCList(FemLCSweden, FemPYSweden, gf=5)
 
-   ratesByAge(lc_sweden, 10^3, age=seq(27,82,by=5), per=1951:2010, type="ca", col=topo.colors(nage(lc_sweden)))
+   ratesByAge(lc_sweden, 10^3, age=seq(27,82,by=5), per=1951:2010, col=topo.colors(nage(lc_sweden)))
 }
