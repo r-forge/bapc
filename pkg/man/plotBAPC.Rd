@@ -101,7 +101,7 @@ if(requireNamespace("INLA", quietly = TRUE)) {
     result  <- BAPC(lc_sweden, predict=list(npredict=10, retro=TRUE),
         verbose=FALSE, stdweight=whostandard[6:17,2])
 
-    plotBAPCresult, scale=10^5, type="ageSpecProj", showdata=TRUE)
+    plotBAPC(result, scale=10^5, type="ageSpecProj", showdata=TRUE)
 
     ## Assume the data for 2000 to 2010 are not observed
     ## (projection results are the same as above)
