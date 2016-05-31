@@ -138,7 +138,7 @@ plotBAPC <- function(APCList, scale=10^5, type="ageSpecProj", probs=c(0.025, seq
 	    }
     }
     if(type == "ageStdRate" | type == "ageStdProj"){
-      if(is.na(agestd.proj(APCList))){
+      if(any(is.na(agestd.proj(APCList)))){
         stop("There are no agestandardized projections or rates available. Probably you did not provide standardisation weights to the function BAPC\n")
       }
     if(type=="ageStdRate"){
