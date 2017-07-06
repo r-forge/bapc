@@ -3,7 +3,7 @@ BAPC <- function(APCList,  predict = list(npredict = 0, retro = TRUE),
                       period=list(include=TRUE, model="rw2", prior="loggamma", param=c(1, 0.00005), initial=4, scale.model=FALSE),
                       cohort=list(include=TRUE, model="rw2", prior="loggamma", param=c(1, 0.00005), initial=4, scale.model=FALSE),
                       overdis=list(include=TRUE, model="iid", prior="loggamma", param=c(1, 0.005), initial=4)),
-                      verbose=FALSE, stdweight=NULL){
+                      secondDiff=FALSE, stdweight=NULL, verbose=FALSE){
 
   if(!is.null(stdweight)){
     if(length(stdweight) != nage(APCList))
@@ -15,6 +15,12 @@ BAPC <- function(APCList,  predict = list(npredict = 0, retro = TRUE),
   }  
   if(predict$npredict < 0){
     stop("\n\n\tThe argument npredict must be an integer larger or equal to zero\n")
+  }
+  if(!is.logical(secondDiff)){
+    stop("\n\n\tThe argument secondDiff must be either TRUE or FALSE\n")
+  }
+  if(!is.logical(verbose)){
+    stop("\n\n\tThe argument verbose must be either TRUE or FALSE\n")
   }
   model$age <- .checkmodel(model$age)
   model$period <- .checkmodel(model$period)
@@ -85,22 +91,57 @@ BAPC <- function(APCList,  predict = list(npredict = 0, retro = TRUE),
     len <- length(y)
     p <- matrix(NA, len, len)
     diag(p) <- 1
-    lcs <- INLA::inla.make.lincombs(Predictor=p)
-    names(lcs) <- unlist(strsplit(sprintf("lc%.6f", 1:len/10000), ".", fixed=T))[seq(2, 2*len, 2)]
+    lincomb <- INLA::inla.make.lincombs(Predictor=p)
+    names(lincomb) <- unlist(strsplit(sprintf("lc%.6f", 1:len/10000), ".", fixed=T))[seq(2, 2*len, 2)]
     config <- TRUE
   } else {
-    lcs <- NULL
+    lincomb <- NULL
     config <- TRUE
+  }
+  if(secondDiff){
+    # define linear combinations for the second differences
+    
+    # AGE
+    for(l in 3:I) 
+    {
+      idx <- rep(NA, I)
+      idx[c(l, l-1, l-2)] <- c(1,-2,1)
+      lc <- INLA::inla.make.lincomb(i=idx)
+      names(lc) <- paste("diff_i.", .num(l, width=4), sep="")
+      lincomb <- c(lincomb, lc)
+    }
+    # PERIOD
+    for(l in 3:J)
+    {
+      idx <- rep(NA, J)
+      idx[c(l, l-1, l-2)] <- c(1,-2, 1)
+      lc <- INLA::inla.make.lincomb(j=idx)
+      names(lc) <- paste("diff_j.", .num(l, width=4), sep="")
+      lincomb <- c(lincomb, lc)
+    }
+    # COHORT
+    for(l in 3:K)
+    {
+      idx <- rep(NA, K)
+      idx[c(l, l-1, l-2)] <- c(1,-2, 1)
+      lc <- INLA::inla.make.lincomb(k=idx)
+      names(lc) <- paste("diff_k.", .num(l, width=4), sep="")
+      lincomb <- c(lincomb, lc)
+    }
   }
 
   res <- INLA::inla(as.formula(formula), family="Poisson", data=data.inla, E=n, 
       control.predictor=list(compute=TRUE, link=1),
-      lincomb=lcs,
+      lincomb=lincomb,
       #quantiles=c(0.025, 0.1, 0.25, 0.5, 0.75, 0.9, 0.975),
       control.compute=list(config=config, dic=TRUE, cpo=TRUE),
-      control.inla=list(lincomb.derived.only=TRUE, lincomb.derived.correlation.matrix=TRUE), verbose=verbose)
+      control.inla=list(lincomb.derived.only=TRUE, 
+                        lincomb.derived.correlation.matrix=TRUE), 
+      verbose=verbose)
   inlares(APCList) <- res
+  
 
+  
 #   lambda=sapply(1:(I*J), function(i){INLA::inla.emarginal(function(x){exp(x)}, res$marginals.linear.predictor[[i]])})
 #   lambda2=sapply(1:(I*J), function(i){INLA::inla.emarginal(function(x){exp(x)^2}, res$marginals.linear.predictor[[i]])})
 # 
@@ -151,10 +192,10 @@ BAPC <- function(APCList,  predict = list(npredict = 0, retro = TRUE),
     my.wm <- matrix(rep(stdweight, each=J), byrow=F, nrow=J)
     stdobs(APCList)=rowSums(my.wm * epi(APCList)/pyrs(APCList), na.rm=T)*rowSums(pyrs(APCList))
 
-    idx.sort <- sort(res$summary.lincomb.derived$ID, index.return=T)$ix
+    idx.sort <- sort(res$summary.lincomb.derived$ID[1:(I*J)], index.return=T)$ix
     lc <- res$summary.lincomb.derived[idx.sort,]
 
-    mcor <- res$misc$lincomb.derived.correlation.matrix
+    mcor <- res$misc$lincomb.derived.correlation.matrix[1:(I*J), 1:(I*J)]
     if(sum(colnames(mcor)!=rownames(mcor)) > 0){
         message("WARNING")}
 

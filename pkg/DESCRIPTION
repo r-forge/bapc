@@ -1,7 +1,7 @@
 Package: BAPC
-Version: 0.0.33
+Version: 0.0.34
 Title: Projection of cancer incidence and mortality data using Bayesian APC models fitted with INLA
-Date: 2016-05-30
+Date: 2017-07-02
 Author: Andrea Riebler <andrea.riebler@math.ntnu.no> and Leonhard Held <leonhard.held@ifspm.uzh.ch>
 Maintainer: Andrea Riebler <andrea.riebler@math.ntnu.no>
 LazyLoad: Yes

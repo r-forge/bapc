@@ -173,3 +173,27 @@
         modlist$prior = "loggamma"
     return(modlist)
 }
+
+.num <- function(x, width = if (length(x) > 1) .numlen(x) else 8, 
+                          digits = max(4, width)) 
+{
+  return(formatC(x, format = "g", width = width, flag = "0", 
+                 digits = digits))
+}
+
+.numlen <- function (n) 
+{
+  return(floor(log10(max(abs(n)))) + 1)
+}
+
+.logsum2expsum = function(marginal){
+  
+  marginal = INLA::inla.tmarginal(function(x) exp(x), marginal)
+  return(INLA::inla.zmarginal(marginal, silent=TRUE))
+}
+
+.precsum2varsum = function(marginal){
+  
+  marginal = INLA::inla.tmarginal(function(x){1/x}, marginal)
+  return(INLA::inla.zmarginal(marginal, silent=TRUE))
+}
