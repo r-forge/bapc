@@ -8,9 +8,8 @@ citEntry(entry = "Article",
   year         = "2017",
 
   textVersion  =
-  paste("Andrea Riebler and Leonhard Held (2017).",
+  paste("Andrea Riebler and Leonhard Held (2016).",
         "Projecting the future burden of cancer - Bayesian age-period-cohort analysis with integrated  nested Laplace approximations, ",
-        "Biometrical Journal, ", "59(3), 531-549.")
+        "Technical report, ", "Norwegian University of Science and Technology.")
 )
-
 

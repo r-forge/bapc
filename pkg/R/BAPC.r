@@ -134,9 +134,10 @@ BAPC <- function(APCList,  predict = list(npredict = 0, retro = TRUE),
       control.predictor=list(compute=TRUE, link=1),
       lincomb=lincomb,
       #quantiles=c(0.025, 0.1, 0.25, 0.5, 0.75, 0.9, 0.975),
-      control.compute=list(config=config, dic=TRUE, cpo=TRUE),
-      #control.inla=list(lincomb.derived.only=TRUE, 
-      #                  lincomb.derived.correlation.matrix=TRUE), 
+      control.compute=list(config=config, dic=TRUE, cpo=TRUE,
+                           return.marginals.predictor=TRUE),
+      control.inla=list(#lincomb.derived.only=TRUE, 
+                        lincomb.derived.correlation.matrix=TRUE), 
       verbose=verbose)
   inlares(APCList) <- res
   
