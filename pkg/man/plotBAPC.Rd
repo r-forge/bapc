@@ -12,7 +12,8 @@ generated using \code{BAPC} using a fanplot.
 plotBAPC(APCList, scale = 10^5, type="ageSpecProj",
     probs = c(0.025, seq(0.05, 0.95, by=0.05), 0.975), start=NULL,
     showdata = TRUE, mfrow = NULL, col.fan =sequential_hcl,
-    obs.pch=21, obs.col="white", obs.bg="black", obs.lwd=2, obs.cex=1, ln=NULL, ...)
+    obs.pch=21, obs.col="white", obs.bg="black", obs.lwd=2, obs.cex=1, ln=NULL, 
+    ylim_sdr=NULL, ylim_sdp=NULL,...)
 }
 \arguments{
   \item{APCList}{
@@ -73,6 +74,12 @@ plotBAPC(APCList, scale = 10^5, type="ageSpecProj",
 }
   \item{ln}{
     Equivalent to option 'ln' of function \code{fan}.
+}
+  \item{ylim_sdr}{
+    Range of y-axis when plotting age-standardized rates.
+}
+  \item{ylim_sdp}{
+    Range of y-axis when plotting age-standardized counts.
 }
   \item{\dots}{
     Further arguments passed to \code{par()}

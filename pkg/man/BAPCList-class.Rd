@@ -79,9 +79,10 @@
 }
 \section{Constructor}{
     Creates a APCList object:
-    \describe{
-    \item{}{
-        \code{APCList(epi, pyrs, gf, agelab=character(), periodlab=character(), cohortlab=character())}
+    \code{APCList(epi, pyrs, gf, agelab=character(), periodlab=character(), cohortlab=character())}
+    %\describe{
+   % \item{}{
+    %    \code{APCList(epi, pyrs, gf, agelab=character(), periodlab=character(), cohortlab=character())}
         \describe{
             \item{\code{epi}}{A \code{data.frame} object of disease or mortality counts. 
                 The number of rows are equal to the number of periods and the number of columns
@@ -110,8 +111,8 @@
             \item{\code{agestd.proj}}{A matrix of dimension J * 4 containing 2.5\% CI, mean and the 97.5\% CI and the standard deviation of age standardized projections for all J periods.}
             \item{\code{inlares}}{A list containing the INLA results object.}}
     }
-    }
-}
+ %   }
+%}
 \section{Methods}{
   \describe{
     \item{x[i,j]}{\code{signature(x = "APCList")}: Creates a APCList 

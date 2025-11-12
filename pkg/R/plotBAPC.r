@@ -1,7 +1,7 @@
 plotBAPC <- function(APCList, scale=10^5, type="ageSpecProj", probs=c(0.025, seq(0.05, 0.95, by=0.05), 0.975), 
                      start=NULL, showdata=TRUE, mfrow=NULL, 
                      col.fan=sequential_hcl, obs.pch=21, obs.col="white", obs.bg="black",  obs.lwd=2, obs.cex=1,
-                     ln=NULL,...){
+                     ln=NULL, ylim_sdr=NULL, ylim_sdp=NULL, ...){
 
   if(class(APCList) != "APCList"){
     stop("The first function argument must be of class \"APCList\"")
@@ -156,8 +156,14 @@ plotBAPC <- function(APCList, scale=10^5, type="ageSpecProj", probs=c(0.025, seq
 	      }
 	      st <- which(periodlabels(APCList)==start)
 	    }
+	    if(!is.null(ylim_sdr)){
+	      ylim=ylim_sdr
+	    } else {
+	      ylim = NULL
+	    }
 	    matplot(agestd.rate(APCList)[st:J,newcolnames]*scale, type="n", lty=c(2,1,2), col=1,  
-	      xlab="Period", ylab=paste("Agestd. rate per ", format(scale, scientific=FALSE), sep=""), xaxt="n",...)
+	      xlab="Period", ylab=paste("Agestd. rate per ", 
+	     format(scale, scientific=FALSE), sep=""), xaxt="n", ylim=ylim, ...)
 	    # find out where to put the x-axis tick marks and label with plab
 	    plabn <- as.numeric(plab[st:J])
 	    getlabels <- cbind(1:length(plabn), plabn)
@@ -199,10 +205,15 @@ plotBAPC <- function(APCList, scale=10^5, type="ageSpecProj", probs=c(0.025, seq
         }
         st <- which(periodlabels(APCList)==start)
       }
+      if(!is.null(ylim_sdp)){
+        ylim=ylim_sdp
+      } else {
+        ylim = NULL
+      }
       matplot(agestd.proj(APCList)[st:J,newcolnames]/agg.n[st:J]*scale, type="n", lty=c(2,1,2), 
           col=1,  
           xlab="Period", ylab=paste("Agestd. rate per ", format(scale, scientific=FALSE), sep=""),
-          xaxt="n", ...)
+          xaxt="n", ylim=ylim,...)
       # find out where to put the x-axis tick marks and label with plab)
       plabn <- as.numeric(plab[st:J])
       getlabels <- cbind(1:length(plabn), plabn)
